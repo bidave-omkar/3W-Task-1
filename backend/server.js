@@ -9,10 +9,21 @@ connectDB();
 
 const app = express();
 
+const allowedOrigins = [
+  "https://3-w-task-1.vercel.app"
+];
+
 app.use(cors({
-  origin: "https://your-project-name.vercel.app",
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   credentials: true
 }));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
