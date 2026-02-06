@@ -9,9 +9,8 @@ connectDB();
 
 const app = express();
 
-const allowedOrigins = [
-  "https://3-w-task-1.vercel.app"
-];
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.use(cors({
   origin: function (origin, callback) {
@@ -21,11 +20,8 @@ app.use(cors({
       callback(new Error("Not allowed by CORS"));
     }
   },
-  credentials: true
 }));
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 

@@ -32,7 +32,6 @@ const CreatePost = ({ setPosts }) => {
     const res = await fetch(`${import.meta.env.VITE_API_URL}/api/posts`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
       body: formData,
