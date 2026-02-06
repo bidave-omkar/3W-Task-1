@@ -13,7 +13,7 @@ const PostCard = ({ post, setPosts }) => {
   /* LIKE / UNLIKE */
   const likePost = async () => {
     const res = await fetch(
-      `http://localhost:5000/api/posts/${post._id}/like`,
+      `${import.meta.env.VITE_API_URL}/api/posts/${post._id}/like`,
       {
         method: "POST",
         headers: {
@@ -34,7 +34,7 @@ const PostCard = ({ post, setPosts }) => {
     if (!comment.trim()) return;
 
     const res = await fetch(
-      `http://localhost:5000/api/posts/${post._id}/comment`,
+      `${import.meta.env.VITE_API_URL}/api/posts/${post._id}/comment`,
       {
         method: "POST",
         headers: {
@@ -81,7 +81,7 @@ const PostCard = ({ post, setPosts }) => {
       {post.text && <p className="post-text">{post.text}</p>}
       {post.image && (
         <img
-          src={`http://localhost:5000${post.image}`}
+          src={`${import.meta.env.VITE_API_URL}${post.image}`}
           className="post-image"
           alt="post"
         />

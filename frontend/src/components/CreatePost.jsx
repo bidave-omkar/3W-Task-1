@@ -29,7 +29,7 @@ const CreatePost = ({ setPosts }) => {
     formData.append("text", text);
     if (media) formData.append("media", media);
 
-    const res = await fetch("http://localhost:5000/api/posts", {
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/api/posts`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
