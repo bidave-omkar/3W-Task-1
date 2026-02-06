@@ -11,7 +11,10 @@ const Dashboard = () => {
     const fetchPosts = async () => {
       const token = localStorage.getItem("token");
       const res = await fetch(`${import.meta.env.VITE_API_URL}/api/posts`, {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
+        },
       });
       const data = await res.json();
       setPosts(data);
