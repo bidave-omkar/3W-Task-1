@@ -15,7 +15,7 @@ const postSchema = new mongoose.Schema(
       type: String,
     },
     image: {
-      type: String // file path like /uploads/abc.jpg
+      type: String,
     },
     likes: [
       {

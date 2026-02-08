@@ -7,52 +7,52 @@ const protect = require("../middleware/authMiddleware");
 
 const router = express.Router();
 
-/* ===== MULTER CONFIG ===== */
-const storage = multer.diskStorage({
-  destination(req, file, cb) {
-    cb(null, "uploads/");
-  },
-  filename(req, file, cb) {
-    cb(
-      null,
-      `${Date.now()}-${Math.round(Math.random() * 1e9)}${path.extname(file.originalname)}`
-    );
-  },
-});
-
-const upload = multer({
-  storage,
-  limits: { fileSize: 10 * 1024 * 1024 }, // 10MB
-});
-
-/* ===== CREATE POST ===== */
+/* ================= CREATE POST ================= */
 router.post(
   "/",
   protect,
-  upload.single("media"),
+  upload.single("image"),
   async (req, res) => {
-    const { text } = req.body;
+    try {
+      const { text } = req.body;
 
-    if (!text && !req.file) {
-      return res
-        .status(400)
-        .json({ message: "Text or image/video required" });
+      if (!text && !req.file) {
+        return res.status(400).json({ message: "Post cannot be empty" });
+      }
+
+      let imageUrl = null;
+
+      if (req.file) {
+        const uploadResult = await new Promise((resolve, reject) => {
+          const stream = cloudinary.uploader.upload_stream(
+            { folder: "social_posts" },
+            (error, result) => {
+              if (error) reject(error);
+              else resolve(result);
+            }
+          );
+          stream.end(req.file.buffer);
+        });
+
+        imageUrl = uploadResult.secure_url;
+      }
+
+      const post = await Post.create({
+        user: req.user.id,
+        username: req.user.email,
+        text,
+        image: imageUrl,
+      });
+
+      res.status(201).json(post);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Server error" });
     }
-
-    const user = await User.findById(req.user).select("email");
-
-    const post = await Post.create({
-      user: req.user,
-      username: user.email,
-      text,
-      image: req.file ? `/uploads/${req.file.filename}` : null,
-    });
-
-    res.status(201).json(post);
   }
 );
 
-/* ===== GET FEED ===== */
+/* ================= GET POSTS ================= */
 router.get("/", protect, async (req, res) => {
   const posts = await Post.find().sort({ createdAt: -1 });
   res.json(posts);
