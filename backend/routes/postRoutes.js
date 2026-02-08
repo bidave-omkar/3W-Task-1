@@ -1,9 +1,10 @@
 const express = require("express");
-const multer = require("multer");
 const path = require("path");
 const Post = require("../models/Post");
 const User = require("../models/User");
 const protect = require("../middleware/authMiddleware");
+const upload = require("../middleware/upload");   
+const cloudinary = require("../config/cloudinary");
 
 const router = express.Router();
 
