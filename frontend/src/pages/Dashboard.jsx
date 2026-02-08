@@ -52,19 +52,27 @@ const Dashboard = () => {
       </header >
 
       {/* ===== FEED ===== */}
-      < main className="feed-container" >
+      <main className="feed-container">
         <CreatePost setPosts={setPosts} />
 
         <div className="feed">
-          {posts.map((post) => (
-            <PostCard
-              key={post._id}
-              post={post}
-              setPosts={setPosts}
-            />
-          ))}
+          {posts.length === 0 ? (
+            <div className="no-posts">
+              <p>No posts yet</p>
+              <span>Be the first one to share something 🚀</span>
+            </div>
+          ) : (
+            posts.map((post) => (
+              <PostCard
+                key={post._id}
+                post={post}
+                setPosts={setPosts}
+              />
+            ))
+          )}
         </div>
-      </main >
+      </main>
+
     </>
   );
 };
