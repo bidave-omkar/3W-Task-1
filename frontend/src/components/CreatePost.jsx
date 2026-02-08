@@ -1,3 +1,4 @@
+// frontend\src\components\CreatePost.jsx
 import React, { useState } from "react";
 import "../styles/post.css";
 
@@ -29,13 +30,18 @@ const CreatePost = ({ setPosts }) => {
     formData.append("text", text);
     if (image) formData.append("image", image);
 
-    const res = await fetch(`${import.meta.env.VITE_API_URL}/posts`, {
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/api/posts`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
       },
       body: formData,
     });
+
+    if (!res.ok) {
+      const text = await res.text();
+      throw new Error(text);
+    }
 
     const data = await res.json();
     setPosts((prev) => [data, ...prev]);
