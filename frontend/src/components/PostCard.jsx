@@ -81,11 +81,7 @@ const PostCard = ({ post, setPosts }) => {
       {/* CONTENT */}
       {post.text && <p className="post-text">{post.text}</p>}
       {post.image && (
-        <img
-          src={`${import.meta.env.VITE_API_URL}${post.image}`}
-          className="post-image"
-          alt="post"
-        />
+        <img src={post.image} alt="Post media" />
       )}
 
       {/* ACTIONS */}
