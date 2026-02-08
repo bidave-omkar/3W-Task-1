@@ -1,9 +1,10 @@
+// backend\routes\postRoutes.js
 const express = require("express");
 const path = require("path");
 const Post = require("../models/Post");
 const User = require("../models/User");
 const protect = require("../middleware/authMiddleware");
-const upload = require("../middleware/upload");   
+const upload = require("../middleware/upload");
 const cloudinary = require("../config/cloudinary");
 
 const router = express.Router();
@@ -38,13 +39,14 @@ router.post(
         imageUrl = uploadResult.secure_url;
       }
 
+      const user = await User.findById(req.user).select("email");
+
       const post = await Post.create({
-        user: req.user.id,
-        username: req.user.email,
+        user: req.user,
+        username: user.email,
         text,
         image: imageUrl,
       });
-
       res.status(201).json(post);
     } catch (error) {
       console.error(error);

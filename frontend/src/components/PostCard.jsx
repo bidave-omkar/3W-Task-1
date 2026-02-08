@@ -1,3 +1,4 @@
+// frontend\src\components\PostCard.jsx
 import React, { useState } from "react";
 import "../styles/post.css";
 
