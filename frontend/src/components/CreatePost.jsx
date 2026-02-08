@@ -3,14 +3,14 @@ import "../styles/post.css";
 
 const CreatePost = ({ setPosts }) => {
   const [text, setText] = useState("");
-  const [media, setMedia] = useState(null);
+  const [image, setImage] = useState(null);
   const [preview, setPreview] = useState(null);
 
-  const handleMedia = (e) => {
+  const handleImage = (e) => {
     const file = e.target.files[0];
     if (!file) return;
 
-    setMedia(file);
+    setImage(file);
 
     const reader = new FileReader();
     reader.onloadend = () => setPreview(reader.result);
@@ -18,8 +18,8 @@ const CreatePost = ({ setPosts }) => {
   };
 
   const submitPost = async () => {
-    if (!text && !media) {
-      alert("Text or image/video required");
+    if (!text && !image) {
+      alert("Text or image required");
       return;
     }
 
@@ -27,7 +27,7 @@ const CreatePost = ({ setPosts }) => {
 
     const formData = new FormData();
     formData.append("text", text);
-    if (media) formData.append("media", media);
+    if (image) formData.append("image", image);
 
     const res = await fetch(`${import.meta.env.VITE_API_URL}/api/posts`, {
       method: "POST",
@@ -41,7 +41,7 @@ const CreatePost = ({ setPosts }) => {
     setPosts((prev) => [data, ...prev]);
 
     setText("");
-    setMedia(null);
+    setImage(null);
     setPreview(null);
   };
 
@@ -57,8 +57,8 @@ const CreatePost = ({ setPosts }) => {
 
       <div className="create-actions">
         <label className="media-btn">
-          <input type="file" accept="image/*" hidden onChange={handleMedia} />
-          📸 Media
+          <input type="file" accept="image/*" hidden onChange={handleImage} />
+          📸 Image
         </label>
 
         <button className="post-btn" onClick={submitPost}>
